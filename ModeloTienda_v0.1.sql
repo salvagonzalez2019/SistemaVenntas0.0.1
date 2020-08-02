@@ -1,9 +1,13 @@
+drop database tienda if exists;
+create database tienda;
+use tienda;
+
 CREATE TABLE `Proveedor` (
 `idProveedor` int NOT NULL AUTO_INCREMENT,
 `nombreProveedor` varchar(100) NOT NULL,
 `direccionProveedor` varchar(255) NOT NULL,
-`rfcProveedor` varchar(13) NULL DEFAULT N/A,
-`logo` varchar(255) NULL DEFAULT N/A,
+`rfcProveedor` varchar(13) NULL DEFAULT 'N/A',
+`logo` varchar(255) NULL DEFAULT 'N/A',
 `status` tinyint NOT NULL DEFAULT 1,
 PRIMARY KEY (`idProveedor`) 
 );
@@ -13,8 +17,8 @@ CREATE TABLE `Usuario` (
 `ape1User` varchar(100) NOT NULL,
 `ape2User` varchar(100) NULL,
 `direccionUser` varchar(255) NULL,
-`rfcUser` varchar(13) NULL DEFAULT N/A,
-`nnsUser` varchar(11) NULL DEFAULT N/A,
+`rfcUser` varchar(13) NULL DEFAULT 'N/A',
+`nnsUser` varchar(11) NULL DEFAULT 'N/A',
 `statusUser` tinyint NOT NULL DEFAULT 1,
 `idRol` int NOT NULL,
 `idTienda` int NOT NULL,
@@ -79,21 +83,21 @@ CREATE TABLE `Primario` (
 `idPrimario` int NOT NULL AUTO_INCREMENT,
 `nombrePrimario` varchar(100) NOT NULL,
 `descripcionPrimario` varchar(255) NULL,
-`statusPrimario` tin NOT NULL DEFAULT 1,
+`statusPrimario` tinyint NOT NULL DEFAULT 1,
 PRIMARY KEY (`idPrimario`) 
 );
 CREATE TABLE `Secundario` (
 `idSecundario` int NOT NULL AUTO_INCREMENT,
 `nombreSecundario` varchar(100) NOT NULL,
 `descripcionSecundario` varchar(255) NULL,
-`statusSecundario` tin NOT NULL DEFAULT 1,
+`statusSecundario` tinyint NOT NULL DEFAULT 1,
 PRIMARY KEY (`idSecundario`) 
 );
 CREATE TABLE `Terciario` (
 `idTerciario` int NOT NULL AUTO_INCREMENT,
 `nombreTerciario` varchar(100) NOT NULL,
 `descripcionTerciario` varchar(255) NULL,
-`statusTerciario` tin NOT NULL DEFAULT 1,
+`statusTerciario` tinyint NOT NULL DEFAULT 1,
 PRIMARY KEY (`idTerciario`) 
 );
 CREATE TABLE `TipoPago` (
@@ -132,14 +136,14 @@ PRIMARY KEY (`idDetalleCompra`)
 );
 CREATE TABLE `Compra` (
 `idCompra` int NOT NULL AUTO_INCREMENT,
-`fechaCompra` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+`fechaCompra` datetime NOT NULL,
 PRIMARY KEY (`idCompra`) 
 );
 CREATE TABLE `Venta` (
 `idVenta` int NOT NULL AUTO_INCREMENT,
 `idUser` int NOT NULL,
 `idCliente` int NOT NULL,
-`fechaVenta` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+`fechaVenta` datetime NOT NULL,
 PRIMARY KEY (`idVenta`) 
 );
 CREATE TABLE `DetalleVenta` (
@@ -162,4 +166,11 @@ ALTER TABLE `Variante` ADD CONSTRAINT `tipoVariante` FOREIGN KEY (`idTipoVariant
 ALTER TABLE `Variante` ADD CONSTRAINT `articulo` FOREIGN KEY (`idArticulo`) REFERENCES `Articulo` (`idArticulo`);
 ALTER TABLE `FormaPago` ADD CONSTRAINT `cliente` FOREIGN KEY (`idCliente`) REFERENCES `Cliente` (`idCliente`);
 ALTER TABLE `FormaPago` ADD CONSTRAINT `tipopago` FOREIGN KEY (`idTipoPago`) REFERENCES `TipoPago` (`idTipoPago`);
+ALTER TABLE `DetalleCompra` ADD CONSTRAINT `provedor` FOREIGN KEY (`idProveedor`) REFERENCES `Proveedor` (`idProveedor`);
+ALTER TABLE `DetalleCompra` ADD CONSTRAINT `variante` FOREIGN KEY (`idVariante`) REFERENCES `Variante` (`idVariante`);
+ALTER TABLE `DetalleCompra` ADD CONSTRAINT `compra` FOREIGN KEY (`idCompra`) REFERENCES `Compra` (`idCompra`);
+ALTER TABLE `Venta` ADD CONSTRAINT `usario` FOREIGN KEY (`idUser`) REFERENCES `Usuario` (`idUser`);
+ALTER TABLE `Venta` ADD CONSTRAINT `clienteVenta` FOREIGN KEY (`idCliente`) REFERENCES `Cliente` (`idCliente`);
+ALTER TABLE `DetalleVenta` ADD CONSTRAINT `venta` FOREIGN KEY (`idVenta`) REFERENCES `Venta` (`idVenta`);
+ALTER TABLE `DetalleVenta` ADD CONSTRAINT `varianteVenta` FOREIGN KEY (`idVariante`) REFERENCES `Variante` (`idVariante`);
 
